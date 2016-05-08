@@ -1,0 +1,14 @@
+sudo: false
+language: rust
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+matrix:
+  allow_failure:
+    - rust: nightly
+
+notifications:
+  email: false

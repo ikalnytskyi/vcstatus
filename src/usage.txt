@@ -1,0 +1,11 @@
+usage: vcstatus [options]
+
+options:
+  -f, --format=FORMAT   the format string to use [default: %n:%b]
+  -q, --quiet           supress runtime errors
+  -v, --version         show vcstatus version
+  -h, --help            show help message
+
+formats:
+  %n                    vcs short name (e.g. git, hg)
+  %b                    vcs active branch (e.g. master)
