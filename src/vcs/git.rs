@@ -94,8 +94,8 @@ impl VCS for Git {
             None => Err(Box::new(io::Error::new(
                 io::ErrorKind::InvalidData,
                 format!(
-                    "Can't parse .git/HEAD: expected: {}; found: {}",
-                    RE_BRANCH.as_str(), head
+                    "Can't parse .git/HEAD: '{}' doesn't match '{}'.",
+                    head.trim(), RE_BRANCH.as_str()
                 )))),
         }
     }
