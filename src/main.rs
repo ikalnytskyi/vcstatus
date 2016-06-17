@@ -45,7 +45,14 @@ fn main() {
         .and_then(|dopt| dopt.version(Some(version)).parse())
         .unwrap_or_else(|e| e.exit());
 
-    if let Some(vcs) = get_vcs(std::env::current_dir().unwrap().as_path()) {
+    let cwd = std::env::current_dir().unwrap_or_else(|err| {
+        if !args.get_bool("--quiet") {
+            writeln!(&mut std::io::stderr(), "{}", err).ok();
+        }
+        std::process::exit(1);
+    });
+
+    if let Some(vcs) = get_vcs(&cwd) {
         // Print VCS information to standard output. It's not an optimal
         // solution because:
         //
