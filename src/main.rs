@@ -71,8 +71,7 @@ fn main() {
                     Ok(ref branch) => branch,
                     Err(ref err) => {
                         if !args.get_bool("--quiet") {
-                            writeln!(&mut std::io::stderr(), "{}",
-                                     err.description()).ok();
+                            writeln!(&mut std::io::stderr(), "{}", err).ok();
                         }
 
                         // vcstatus has been designed to be used in shell
