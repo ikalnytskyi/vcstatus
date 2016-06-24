@@ -66,7 +66,7 @@ impl VCS for Git {
     /// predefined regexps and they are tested.
     fn branch(&self) -> Result<String, Box<error::Error>> {
         lazy_static! {
-            static ref RE_BRANCH: Regex = Regex::new(r"ref:\s*refs/heads/(.*)").unwrap();
+            static ref RE_BRANCH: Regex = Regex::new(r"ref:\s*refs/heads/([^\s]*)").unwrap();
             static ref RE_GITDIR: Regex = Regex::new(r"gitdir:\s*(.*)").unwrap();
         }
 
@@ -88,15 +88,12 @@ impl VCS for Git {
         let mut head = String::new();
         try!(try!(File::open(&gitdir.join("HEAD"))).read_to_string(&mut head));
 
-        match RE_BRANCH.captures(&head) {
-            Some(captures) => Ok(captures[1].trim().to_string()),
-
-            None => Err(Box::new(io::Error::new(
-                io::ErrorKind::InvalidData,
-                format!(
+        RE_BRANCH.captures(&head)
+            .map(|captures| captures[1].to_string())
+            .ok_or(
+                Box::new(io::Error::new(io::ErrorKind::InvalidData, format!(
                     "Can't parse .git/HEAD: '{}' doesn't match '{}'.",
                     head.trim(), RE_BRANCH.as_str()
-                )))),
-        }
+                ))))
     }
 }
