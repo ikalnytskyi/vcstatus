@@ -89,7 +89,7 @@ impl VCS for Git {
         try!(try!(File::open(&gitdir.join("HEAD"))).read_to_string(&mut head));
 
         match RE_BRANCH.captures(&head) {
-            Some(captures) => Ok(captures[1].to_string()),
+            Some(captures) => Ok(captures[1].trim().to_string()),
 
             None => Err(Box::new(io::Error::new(
                 io::ErrorKind::InvalidData,

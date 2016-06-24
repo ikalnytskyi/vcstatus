@@ -61,6 +61,6 @@ impl VCS for Hg {
         try!(try!(File::open(&self.root.join(".hg").join("branch")))
             .read_to_string(&mut branch));
 
-        Ok(branch)
+        Ok(branch.trim().to_string())
     }
 }
