@@ -63,4 +63,27 @@ impl VCS for Hg {
 
         Ok(branch.trim().to_string())
     }
+
+    /// Returns `true` if uncommitted changes are detected.
+    ///
+    /// # Errors
+    ///
+    /// If `hg` binary is not installed in the system.
+    fn modified(&self) -> Result<bool, Box<error::Error>> {
+        use std::process::{Command, Stdio};
+
+        let status = try!(Command::new("hg")
+            .args(&[
+                "status",
+                "--quiet",
+                "--modified",
+                "--added",
+                "--removed",
+            ])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status());
+
+        Ok(!status.success())
+    }
 }

@@ -80,6 +80,19 @@ fn main() {
                         "(unknown)"
                     }
                 })
+            .replace("%m",
+                match vcs.modified() {
+                    Ok(modified) => if modified { "+" } else { "" },
+                    Err(ref err) => {
+                        if !args.get_bool("--quiet") {
+                            writeln!(&mut std::io::stderr(), "{}", err).ok();
+                        }
+
+                        // We can't determine real status, so let's print
+                        // question mark as a message that we don't know.
+                        "?"
+                    }
+                })
         );
     }
 }

@@ -33,6 +33,9 @@ pub trait VCS {
     /// a current active branch. The most possible reason is various
     /// I/O errors.
     fn branch(&self) -> Result<String, Box<Error>>;
+
+    /// Returns `true` if uncommitted changes are detected.
+    fn modified(&self) -> Result<bool, Box<Error>>;
 }
 
 

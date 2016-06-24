@@ -96,4 +96,26 @@ impl VCS for Git {
                     head.trim(), RE_BRANCH.as_str()
                 ))))
     }
+
+    /// Returns `true` if uncommitted changes are detected.
+    ///
+    /// # Errors
+    ///
+    /// If `git` binary is not installed in the system.
+    fn modified(&self) -> Result<bool, Box<error::Error>> {
+        use std::process::{Command, Stdio};
+
+        let status = try!(Command::new("git")
+            .args(&[
+                "diff",
+                "--no-ext-diff",
+                "--quiet",
+                "--exit-code",
+            ])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status());
+
+        Ok(!status.success())
+    }
 }
