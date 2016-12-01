@@ -58,8 +58,7 @@ impl VCS for Hg {
     fn branch(&self) -> Result<String, Box<error::Error>> {
         let mut branch = String::new();
 
-        try!(try!(File::open(&self.root.join(".hg").join("branch")))
-            .read_to_string(&mut branch));
+        File::open(&self.root.join(".hg").join("branch"))?.read_to_string(&mut branch)?;
 
         Ok(branch.trim().to_string())
     }
@@ -72,7 +71,7 @@ impl VCS for Hg {
     fn modified(&self) -> Result<bool, Box<error::Error>> {
         use std::process::{Command, Stdio};
 
-        let status = try!(Command::new("hg")
+        let status = Command::new("hg")
             .args(&[
                 "status",
                 "--quiet",
@@ -82,7 +81,7 @@ impl VCS for Hg {
             ])
             .stdout(Stdio::null())
             .stderr(Stdio::null())
-            .status());
+            .status()?;
 
         Ok(!status.success())
     }

@@ -77,7 +77,7 @@ impl VCS for Git {
         // to handle that, and amend `gitdir` var accordingly.
         if gitdir.is_file() {
             let mut content = String::new();
-            try!(try!(File::open(&gitdir)).read_to_string(&mut content));
+            File::open(&gitdir)?.read_to_string(&mut content)?;
 
             let captures = RE_GITDIR.captures(&content).unwrap();
             gitdir = self.root.join(captures[1].to_string());
@@ -86,7 +86,7 @@ impl VCS for Git {
         // Current active branch is stored in `.git/HEAD`, but we can't
         // rely on it. `.git/HEAD` may also contain the commit hash sum.
         let mut head = String::new();
-        try!(try!(File::open(&gitdir.join("HEAD"))).read_to_string(&mut head));
+        File::open(&gitdir.join("HEAD"))?.read_to_string(&mut head)?;
 
         RE_BRANCH.captures(&head)
             .map(|captures| captures[1].to_string())
@@ -105,7 +105,7 @@ impl VCS for Git {
     fn modified(&self) -> Result<bool, Box<error::Error>> {
         use std::process::{Command, Stdio};
 
-        let status = try!(Command::new("git")
+        let status = Command::new("git")
             .args(&[
                 "diff",
                 "--no-ext-diff",
@@ -114,7 +114,7 @@ impl VCS for Git {
             ])
             .stdout(Stdio::null())
             .stderr(Stdio::null())
-            .status());
+            .status()?;
 
         Ok(!status.success())
     }
