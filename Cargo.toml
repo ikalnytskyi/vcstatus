@@ -8,6 +8,7 @@ readme = "README.md"
 keywords = ["vcs", "status", "shell", "bash", "integration"]
 repository = "https://github.com/ikalnytskyi/vcstatus.git"
 homepage = "https://github.com/ikalnytskyi/vcstatus"
+edition = "2018"
 
 [dependencies]
 docopt = "1.0"

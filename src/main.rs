@@ -25,15 +25,11 @@
 //! * `%n` - prints VCS short name
 //! * `%b` - prints VCS active branch
 
-extern crate docopt;
-
 #[macro_use]
 extern crate lazy_static;
-extern crate regex;
 
 use std::io::Write;
 
-use vcs::get_vcs;
 mod vcs;
 
 
@@ -52,7 +48,7 @@ fn main() {
         std::process::exit(1);
     });
 
-    if let Some(vcs) = get_vcs(&cwd) {
+    if let Some(vcs) = vcs::get_vcs(&cwd) {
         // Print VCS information to standard output. It's not an optimal
         // solution because:
         //
